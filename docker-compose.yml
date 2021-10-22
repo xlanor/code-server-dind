@@ -1,0 +1,32 @@
+---
+version: "3.9"
+services:
+  code-server:
+    #image: ghcr.io/linuxserver/code-server
+    image: xlanor/code-server-docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Singapore
+      - PASSWORD=<ENTER YOUR PASSWORD>
+      - SUDO_PASSWORD=<SUDO PASSWORD>
+      - PROXY_DOMAIN=<FQDN>
+    volumes:
+      - ./code-server:/config/project
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/jingkai/schoolwork/gios:/config/workspace/gios
+    ports:
+      - 8443:8443
+    restart: unless-stopped
+    networks:
+      - homenetwork
+    labels:
+      - "traefik.enable=true"
+
+networks:
+  homenetwork:
+     external: true
